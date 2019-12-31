@@ -78,7 +78,10 @@ class DBWTestNode(object):
         self.dbw_enabled = msg.data
 
     def steer_cb(self, msg):
-        self.steer = msg.steering_wheel_angle_cmd
+        if hasattr(msg, 'steering_wheel_angle_cmd'):
+            self.steer = msg.steering_wheel_angle_cmd
+        elif hasattr(msg, 'steering_wheel_angle'):
+            self.steer = msg.steering_wheel_angle
 
     def throttle_cb(self, msg):
         self.throttle = msg.pedal_cmd
@@ -88,8 +91,12 @@ class DBWTestNode(object):
 
     def actual_steer_cb(self, msg):
         if self.dbw_enabled and self.steer is not None:
-            self.steer_data.append({'actual': msg.steering_wheel_angle_cmd,
-                                    'proposed': self.steer})
+            if hasattr(msg, 'steering_wheel_angle_cmd'):
+                self.steer_data.append({'actual': msg.steering_wheel_angle_cmd,
+                                        'proposed': self.steer})
+            elif hasattr(msg, 'steering_wheel_angle'):
+                self.steer_data.append({'actual': msg.steering_wheel_angle,
+                                        'proposed': self.steer})
             self.steer = None
 
     def actual_throttle_cb(self, msg):

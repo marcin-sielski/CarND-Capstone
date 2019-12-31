@@ -42,6 +42,7 @@ class Bridge(object):
         self.server = server
         self.vel = 0.
         self.yaw = None
+        self.prev_time = None
         self.angular_vel = 0.
         self.bridge = CvBridge()
 
@@ -99,14 +100,17 @@ class Bridge(object):
 
     def create_steer(self, val):
         st = SteeringReport()
-        st.steering_wheel_angle_cmd = val * math.pi/180.
+        if hasattr(st, 'steering_wheel_angle_cmd'):
+            st.steering_wheel_angle_cmd = val * math.pi/180.
+        elif hasattr(st, 'steering_wheel_angle'):
+            st.steering_wheel_angle = val * math.pi/180.
         st.enabled = True
         st.speed = self.vel
         return st
 
     def calc_angular(self, yaw):
         angular_vel = 0.
-        if self.yaw is not None:
+        if self.yaw is not None and self.prev_time is not None:
             angular_vel = (yaw - self.yaw)/(rospy.get_time() - self.prev_time)
         self.yaw = yaw
         self.prev_time = rospy.get_time()

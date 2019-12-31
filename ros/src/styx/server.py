@@ -48,7 +48,7 @@ def obstacle(sid, data):
     bridge.publish_obstacles(data)
 
 @sio.on('lidar')
-def obstacle(sid, data):
+def lidar(sid, data):
     bridge.publish_lidar(data)
 
 @sio.on('trafficlights')
