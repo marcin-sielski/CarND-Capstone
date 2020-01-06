@@ -1,0 +1,3 @@
+[submodule "ros/src/tl_detector/light_classification/keras_yolo3"]
+	path = ros/src/tl_detector/light_classification/keras_yolo3
+	url = http://github.com/marcin-sielski/keras-yolo3

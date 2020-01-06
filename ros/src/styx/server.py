@@ -11,7 +11,7 @@ from flask import Flask, render_template
 from bridge import Bridge
 from conf import conf
 
-sio = socketio.Server()
+sio = socketio.Server(pingInterval=1000000, pingTimeout=1000000)
 app = Flask(__name__)
 msgs = []
 
@@ -64,4 +64,4 @@ if __name__ == '__main__':
     app = socketio.Middleware(sio, app)
 
     # deploy as an eventlet WSGI server
-    eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
+    eventlet.wsgi.server(eventlet.listen(('10.0.0.4', 4567)), app)
